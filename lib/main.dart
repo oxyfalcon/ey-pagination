@@ -116,43 +116,49 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: .stretch,
           children: [
-            Flexible(
+            Expanded(
               child: ValueListenableBuilder<List<Map<String, dynamic>>>(
                 valueListenable: apiValues,
                 builder: (BuildContext context, value, Widget? child) {
                   return ListView.builder(
                     itemCount: value.length,
                     itemBuilder: (context, index) {
-                      Map<String, dynamic> product = value[index];
-                      return ListTile(title: Text(product["title"]));
+                      final Map<String, dynamic> product = value[index];
+                      return Center(
+                        child: ListTile(
+                          title: Text("${product["title"]}"),
+                          leading: Text("${product["id"]}"),
+                          trailing: Text("${product["price"]}"),
+                        ),
+                      );
                     },
                   );
                 },
               ),
             ),
-            Center(
-              child: ValueListenableBuilder<int>(
-                valueListenable: currentPage,
-                builder: (context, value, child) {
-                  return Row(
-                    children: [
-                      TextButton(
-                        onPressed: value == 1
-                            ? null
-                            : () => currentPage.value -= 1,
-                        child: Text("prev"),
-                      ),
-                      Text(value.toString()),
-                      TextButton(
-                        onPressed: value * pageSize >= products.length
-                            ? null
-                            : () => currentPage.value += 1,
-                        child: Text("next"),
-                      ),
-                    ],
-                  );
-                },
-              ),
+            ValueListenableBuilder<int>(
+              valueListenable: currentPage,
+              builder: (context, value, child) {
+                return Row(
+                  mainAxisAlignment: .center,
+                  spacing: 10,
+                  children: [
+                    TextButton(
+                      onPressed: value == 1
+                          ? null
+                          : () => currentPage.value -= 1,
+                      child: Text("prev"),
+                    ),
+                    Text("$value"),
+                    TextButton(
+                      onPressed: value * pageSize >= products.length
+                          ? null
+                          : () => currentPage.value += 1,
+                      child: Text("next"),
+                    ),
+                  ],
+                );
+              },
             ),
           ],
         ),
