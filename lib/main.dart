@@ -1,121 +1,161 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+List<Map<String, dynamic>> products = [
+  {"id": 1, "title": "iPhone 14", "price": 999},
+  {"id": 2, "title": "Samsung Galaxy S23", "price": 899},
+  {"id": 3, "title": "Pixel 7", "price": 799},
+  {"id": 4, "title": "OnePlus 11", "price": 749},
+  {"id": 5, "title": "Realme GT", "price": 499},
+  {"id": 6, "title": "Xiaomi 13", "price": 650},
+  {"id": 7, "title": "Oppo Reno 10", "price": 550},
+  {"id": 8, "title": "Vivo V27", "price": 450},
+  {"id": 9, "title": "Moto Edge 40", "price": 600},
+  {"id": 10, "title": "Nothing Phone 2", "price": 700},
+  {"id": 11, "title": "iPad Air", "price": 599},
+  {"id": 12, "title": "MacBook Air", "price": 1199},
+  {"id": 13, "title": "Dell XPS 13", "price": 999},
+  {"id": 14, "title": "HP Spectre x360", "price": 1099},
+  {"id": 15, "title": "Lenovo ThinkPad", "price": 950},
+  {"id": 16, "title": "Asus ROG Laptop", "price": 1400},
+  {"id": 17, "title": "Acer Predator", "price": 1300},
+  {"id": 18, "title": "Sony Headphones", "price": 199},
+  {"id": 19, "title": "Bose Speaker", "price": 299},
+  {"id": 20, "title": "JBL Flip", "price": 120},
+  {"id": 21, "title": "Apple Watch Series 8", "price": 399},
+  {"id": 22, "title": "Samsung Watch 5", "price": 349},
+  {"id": 23, "title": "Fitbit Charge 5", "price": 179},
+  {"id": 24, "title": "Garmin Forerunner", "price": 299},
+  {"id": 25, "title": "Canon EOS R5", "price": 2500},
+  {"id": 26, "title": "Nikon Z6", "price": 1800},
+  {"id": 27, "title": "Sony Alpha A7", "price": 2200},
+  {"id": 28, "title": "GoPro Hero 11", "price": 499},
+  {"id": 29, "title": "PlayStation 5", "price": 499},
+  {"id": 30, "title": "Xbox Series X", "price": 499},
+  {"id": 31, "title": "Nintendo Switch", "price": 299},
+  {"id": 32, "title": "Logitech Mouse", "price": 49},
+  {"id": 33, "title": "Mechanical Keyboard", "price": 120},
+  {"id": 34, "title": "Dell Monitor 27\"", "price": 300},
+  {"id": 35, "title": "LG Ultrawide Monitor", "price": 450},
+  {"id": 36, "title": "Apple AirPods Pro", "price": 249},
+  {"id": 37, "title": "Samsung Buds Pro", "price": 199},
+  {"id": 38, "title": "Anker Power Bank", "price": 59},
+  {"id": 39, "title": "Mi Smart Band 7", "price": 59},
+  {"id": 40, "title": "Kindle Paperwhite", "price": 139},
+  {"id": 41, "title": "Smart TV 55\"", "price": 700},
+  {"id": 42, "title": "Fire TV Stick", "price": 49},
+  {"id": 43, "title": "Google Chromecast", "price": 69},
+  {"id": 44, "title": "Bluetooth Speaker Mini", "price": 80},
+  {"id": 45, "title": "External Hard Drive 1TB", "price": 75},
+  {"id": 46, "title": "SSD 512GB", "price": 90},
+  {"id": 47, "title": "Router WiFi 6", "price": 150},
+  {"id": 48, "title": "Webcam HD", "price": 85},
+  {"id": 49, "title": "Office Chair", "price": 200},
+  {"id": 50, "title": "Standing Desk", "price": 450},
+];
+
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(colorSchemeSeed: Colors.blue),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
+
+  const MyHomePage({super.key, required this.title});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  ValueNotifier<List<Map<String, dynamic>>>? _apiValues;
+  ValueNotifier<List<Map<String, dynamic>>> get apiValues =>
+      _apiValues ??= ValueNotifier<List<Map<String, dynamic>>>(
+        products.take(pageSize).toList(),
+      );
+  final ValueNotifier<int> currentPage = ValueNotifier<int>(1);
+  final int pageSize = 20;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  void pageListener() => apiValues.value = currentPage.value == 1
+      ? products.take(pageSize).toList()
+      : products
+            .skip(pageSize * (currentPage.value - 1))
+            .take(pageSize)
+            .toList();
+
+  @override
+  void initState() {
+    super.initState();
+    currentPage.addListener(pageListener);
+  }
+
+  @override
+  void dispose() {
+    currentPage.removeListener(pageListener);
+    apiValues.dispose();
+    currentPage.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: Text(widget.title)),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
+          crossAxisAlignment: .stretch,
           children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Flexible(
+              child: ValueListenableBuilder<List<Map<String, dynamic>>>(
+                valueListenable: apiValues,
+                builder: (BuildContext context, value, Widget? child) {
+                  return ListView.builder(
+                    itemCount: value.length,
+                    itemBuilder: (context, index) {
+                      Map<String, dynamic> product = value[index];
+                      return ListTile(title: Text(product["title"]));
+                    },
+                  );
+                },
+              ),
+            ),
+            Center(
+              child: ValueListenableBuilder<int>(
+                valueListenable: currentPage,
+                builder: (context, value, child) {
+                  return Row(
+                    children: [
+                      TextButton(
+                        onPressed: value == 1
+                            ? null
+                            : () => currentPage.value -= 1,
+                        child: Text("prev"),
+                      ),
+                      Text(value.toString()),
+                      TextButton(
+                        onPressed: value * pageSize >= products.length
+                            ? null
+                            : () => currentPage.value += 1,
+                        child: Text("next"),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
